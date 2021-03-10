@@ -11,7 +11,7 @@ import { TestcomponentComponent } from './Components/testcomponent/testcomponent
     TestcomponentComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule
   ],
   providers: [],
