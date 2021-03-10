@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>FacebookIntegeration</title>
   <base href="/">
- 
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 </head>
 <body>
   <app-root></app-root>
@@ -27,21 +27,29 @@
         statusChangeCallback(response);
       });
     }
-  
+    
   
     window.fbAsyncInit = function() {
       FB.init({
-        appId      : '187264369480401',
+        appId      : '346372936690530',
         cookie     : true,                     // Enable cookies to allow the server to access the session.
         xfbml      : true,                     // Parse social plugins on this webpage.
-        version    : 'v2.4'                   // Use this Graph API version for this call.
+        version    : 'v10.0'                   // Use this Graph API version for this call.
       });
-  
-  
+   
+      triggerLoginCheck();  
       FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
         statusChangeCallback(response);        // Returns the login status.
       });
     };
+
+
+    function triggerLoginCheck() {       
+       FB.getLoginStatus(function(response) {
+       statusChangeCallback(response);
+       console.log(response);  
+       });
+}
     var body = 'Reading JS SDK documentation';
     FB.api('/me/feed', 'post', { message: body }, function(response) {
         if (!response || response.error) {
@@ -59,7 +67,55 @@
           'Thanks for logging in, ' + response.name + '!';
       });
     }
+    
+    FB.api('/187264369480401', function(response) {
+       console.log(response);
+    });
+
+
+    function shareFacebook() {               // Called when a person is finished with the Login Button.
+      FB.ui({
+       display: 'popup',
+        method: 'share',
+         href: 'https://developers.facebook.com/docs/',
+       }, function(response){});
+       
+    }
+
+      var body = 'Reading JS SDK documentation';
+
+    
+    function shareMessage(){
+    FB.api('/me/feed', 'post', { message: body }, function(response) {
+    if (!response || response.error) {
+      alert('Error occured');
+    } else {
+      alert('Post ID: ' + response.id);
+    }
+   });
+    }
   
+    // document.getElementById('shareBtn').onclick = function() {
+    //   FB.ui({
+    //     display: 'popup',
+    //     method: 'share',
+    //     href: 'https://developers.facebook.com/docs/',
+    //   }, function(response){});
+    // }
+    FB.ui({
+      method: 'share',
+      href: 'https://developers.facebook.com/docs/',
+    }, function(response){});
+   
+  
+    var body = 'Reading JS SDK documentation';
+  FB.api('/me/feed', 'post', { message: body }, function(response) {
+  if (!response || response.error) {
+    alert('Error occured');
+  } else {
+    alert('Post ID: ' + response.id);
+  }
+  });
   </script>
   
   
@@ -67,12 +123,16 @@
   
   <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
   </fb:login-button>
-  
+  <!-- <div id="shareBtn" class="btn btn-success clearfix">Share Dialog</div> -->
+  <br>
+  <button id="shareBtn" class="btn btn-success clearfix" onclick="shareFacebook();">Share</button>
+  <br>
+  <button id="shareBtn" class="btn btn-success clearfix" onclick="shareMessage();">PostData</button>
   <div id="status">
   </div>
   
   <!-- Load the JS SDK asynchronously -->
-  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+ 
   
 </body>
 </html>
