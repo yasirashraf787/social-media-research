@@ -8,14 +8,12 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "compile:server": "webpack --config webpack.server.config.js --progress --colors",
+    "start:heroku": "node dist/server",
+    "postinstall": "npm run build:ssr",
     "dev:ssr": "ng run facebook-integeration:serve-ssr",
     "serve:ssr": "node dist/facebook-integeration/server/main.js",
     "build:ssr": "ng build --prod && ng run facebook-integeration:server:production",
-    "prerender": "ng run facebook-integeration:prerender",
-    "start:heroku": "node dist/server",
-    "postinstall": "npm run build/ssr",
-    "heroku-postbuild": "ng build --prod"
+    "prerender": "ng run facebook-integeration:prerender"
   },
   "private": true,
   "dependencies": {
@@ -26,7 +24,6 @@
     "@angular/forms": "~11.2.0",
     "@angular/platform-browser": "~11.2.0",
     "@angular/platform-browser-dynamic": "~11.2.0",
-    "@angular/platform-server": "~11.2.0",
     "@angular/router": "~11.2.0",
     "@nguniversal/express-engine": "^11.2.1",
     "express": "^4.15.2",

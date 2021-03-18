@@ -6,133 +6,109 @@
   <base href="/">
   <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 </head>
-<body>
+
   <app-root></app-root>
-  <script>
-
-    function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
-      console.log('statusChangeCallback');
-      console.log(response);                   // The current login status of the person.
-      if (response.status === 'connected') {   // Logged into your webpage and Facebook.
-        testAPI();  
-      } else {                                 // Not logged into your webpage or we are unable to tell.
-        document.getElementById('status').innerHTML = 'Please log ' +
-          'into this webpage.';
-      }
-    }
-  
-  
-    function checkLoginState() {               // Called when a person is finished with the Login Button.
-      FB.getLoginStatus(function(response) {   // See the onlogin handler
-        statusChangeCallback(response);
-      });
-    }
-    
-  
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId      : '346372936690530',
-        cookie     : true,                     // Enable cookies to allow the server to access the session.
-        xfbml      : true,                     // Parse social plugins on this webpage.
-        version    : 'v10.0'                   // Use this Graph API version for this call.
-      });
-   
-      triggerLoginCheck();  
-      FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
-        statusChangeCallback(response);        // Returns the login status.
-      });
-    };
-
-
-    function triggerLoginCheck() {       
-       FB.getLoginStatus(function(response) {
-       statusChangeCallback(response);
-       console.log(response);  
-       });
-}
-    var body = 'Reading JS SDK documentation';
-    FB.api('/me/feed', 'post', { message: body }, function(response) {
-        if (!response || response.error) {
-          alert('Error occured');
-        } else {
-          alert('Post ID: ' + response.id);
-        }
-      });
-   
-    function testAPI() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
-      console.log('Welcome!  Fetching your information.... ');
-      FB.api('/me', function(response) {
-        console.log('Successful login for: ' + response.name);
-        document.getElementById('status').innerHTML =
-          'Thanks for logging in, ' + response.name + '!';
-      });
-    }
-    
-    FB.api('/187264369480401', function(response) {
-       console.log(response);
-    });
-
-
-    function shareFacebook() {               // Called when a person is finished with the Login Button.
-      FB.ui({
-       display: 'popup',
-        method: 'share',
-         href: 'https://developers.facebook.com/docs/',
-       }, function(response){});
-       
-    }
-
-      var body = 'Reading JS SDK documentation';
+ 
+ <script>
 
     
-    function shareMessage(){
-    FB.api('/me/feed', 'post', { message: body }, function(response) {
-    if (!response || response.error) {
-      alert('Error occured');
-    } else {
-      alert('Post ID: ' + response.id);
+  FB.getLoginStatus(function(response) {
+    if (response.status === 'connected') {
+      console.log("This Starting Point");
+      accessToken = response.authResponse.accessToken;
+    } 
+  } );
+
+  function statusChangeCallback(response) {                             // Called with the results from FB.getLoginStatus().
+    console.log('statusChangeCallback');
+    console.log(response);                                             // The current login status of the person.
+    if (response.status === 'connected') {                            // Logged into your webpage and Facebook.
+      testAPI();  
+    } else {                                                        // Not logged into your webpage or we are unable to tell.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this webpage.';
     }
-   });
-    }
-  
-    // document.getElementById('shareBtn').onclick = function() {
-    //   FB.ui({
-    //     display: 'popup',
-    //     method: 'share',
-    //     href: 'https://developers.facebook.com/docs/',
-    //   }, function(response){});
-    // }
-    FB.ui({
-      method: 'share',
-      href: 'https://developers.facebook.com/docs/',
-    }, function(response){});
-   
-  
-    var body = 'Reading JS SDK documentation';
-  FB.api('/me/feed', 'post', { message: body }, function(response) {
-  if (!response || response.error) {
-    alert('Error occured');
-  } else {
-    alert('Post ID: ' + response.id);
   }
-  });
+
+
+  function testAPI() {                                            // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me?fields=name', function(response) {
+      console.log('Successful login for: ' + response.name);
+      console.log("Response: ", response);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+
+        if(response && !response.error)
+        {
+          
+        }
+    });
+  }
+     
+ window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1501323546744009',
+      cookie     : true,                     // Enable cookies to allow the server to access the session.
+      xfbml      : true,                     // Parse social plugins on this webpage.
+      version    : 'v10.0'                   // Use this Graph API version for this call.
+   });
+
+    triggerLoginCheck();  
+
+  };
+  
+  function triggerLoginCheck() {       
+      FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+      console.log(response);  
+      });
+  }
+        
+  function shareFacebook() {               // Called when a person is finished with the Login Button.
+    FB.ui({
+      display: 'popup',
+      method: 'share',
+        href: 'https://developers.facebook.com/docs/',
+      }, function(response){});
+      
+  }
+    
+  function GetLoginStatus(){
+
+    FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+    });
+  }
+
+  function getAcessToken()
+      {
+        console.log("Access Token: " + this.accessToken);
+        FB.api(
+        '/me/feed',
+        'GET',
+        {'access_token' : this.accessToken},
+        function(response) {
+          console.log(response);
+          if (response && !response.error) {
+          console.log(response);
+          }
+        }
+      );
+    }
+  
   </script>
   
-  
-  <!-- The JS SDK Login Button -->
-  
-  <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-  </fb:login-button>
-  <!-- <div id="shareBtn" class="btn btn-success clearfix">Share Dialog</div> -->
-  <br>
-  <button id="shareBtn" class="btn btn-success clearfix" onclick="shareFacebook();">Share</button>
-  <br>
-  <button id="shareBtn" class="btn btn-success clearfix" onclick="shareMessage();">PostData</button>
-  <div id="status">
-  </div>
-  
-  <!-- Load the JS SDK asynchronously -->
- 
-  
-</body>
+  <body>  
+
+    <div id="status">
+      <textarea rows="25" cols="65"> </textarea>
+    </div>
+      
+    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button> 
+    <button  onclick="testAPI();">Test API</button>
+    <button  onclick="GetLoginStatus();">Login Status</button>
+    <button  onclick="getAcessToken();">get Token</button>
+
+ </body>
 </html>
