@@ -5,12 +5,12 @@ default_md = sha256
 x509_extensions = v3_req
 distinguished_name = dn
 [dn]
-C = PK
-ST = Pakistan
-L = Pakistan
+C = GB
+ST = London
+L = London
 O = My Organisation
 OU = My Organisational Unit
-emailAddress = saif31617@gmail.com
+emailAddress = areebahmedkhan91@gmail.com
 CN = localhost
 [v3_req]
 subjectAltName = @alt_names
