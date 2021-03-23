@@ -3,9 +3,12 @@
    Email: aldevolabstesting@gmail.com
    Pass: aldevolabsTesting123
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-2)copy this command and paste on cmd 
+2)Follow this link to setup SSL for Node JS
+  https://medium.com/@rubenvermeulen/running-angular-cli-over-https-with-a-trusted-certificate-4a0d5f92747a
 
-  ng serve --ssl --ssl-cert D:\ProjectsLibrary\Angular\AngularLearning\Facebook-Itegeration\facebook-integeration\localhost.crt --ssl-key  D:\ProjectsLibrary\Angular\AngularLearning\Facebook-Itegeration\facebook-integeration\localhost.key
+  After generating server.crt and server.key files, copy them in the root folder and use the following command to run the app 
+
+  ng serve --ssl --ssl-cert server.crt --ssl-key server.key
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 3)paste this on browser
 
