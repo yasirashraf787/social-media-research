@@ -1,0 +1,23 @@
+ <div class=" text-center  mt-4 heading">
+     <h1 class="text center">Let B Known</h1>
+ </div>
+
+
+<div class="maindiv" >
+    <div class="buttonlogin">
+      
+        <button type="button"  class="btn  btn-lg mt-4 mb-3"  style="color: #0B85EE;" (click)="hideandShowbyfacebook()">{{loginLogoutFBTxt}}</button>
+        <button type="button"  class="btn  btn-lg mx-4 mt-4 mb-3" style="color: #1DA1F2;" (click)="hideandShowbytwitter()">{{loginLogoutTwitterTxt}}</button>
+    </div>
+    
+    <div *ngIf="textAreaAndSubmitButton_1 || textAreaAndSubmitButton_2">
+        <div class="form-group textArea mx-3 mt-5">
+          <textarea class="form-control "  id="exampleFormControlTextarea1"  placeholder="Add your content here" rows="3" cols="5"></textarea>
+        </div>
+        <div class="btnsubmit text-center ">
+           <button type="button" style="color: #1DA1F2;"  class="btn btn-lg mb-4">Submit</button>
+        </div>
+    </div>
+
+</div>
+
