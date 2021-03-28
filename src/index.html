@@ -13,18 +13,69 @@
 <body>
   <app-root></app-root>  
   <script>
+    var fbAccountResponse;
     window.fbAsyncInit = function() {
       FB.init({ 
-        appId: '1501323546744009',
+        appId: '710790686284237',
         status: true, 
         cookie: true, 
         xfbml: true,
         version: 'v10.0'
       });
     };
+
+    function fbLogout() {
+        FB.logout(function (response) {
+           console.log("Logged out successfully");
+           window.location.reload();
+        });
+    }
+
+    function publishContent()
+    {
+      FB.api(
+            "/"+fbAccountResponse.authResponse.userID+"/accounts?",
+            function (response) {
+              if (response && !response.error) {
+                           
+                var page_id = response['data'][0].id;
+                var page_access_token = response['data'][0].access_token;
+
+                FB.api(
+                    "/"+page_id+"/feed",
+                    "POST",
+                    {
+                        "message": document.getElementById("contentTextArea").value,
+                        "access_token": page_access_token
+                    },
+                    function (response) {
+                        console.log(response);
+                        if (response && !response.error) {
+                       
+                        console.log(response);
+                        document.getElementById("contentTextArea").value = '';
+                        alert("Your Post has been Successfully Submitted !!!");
+                        }
+                    }
+                );
+              }
+            }
+        );
+    }
+
   </script>
   
-  <!-- <fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>  -->
-  
+  <div style="width: 400px;">
+  <fb:login-button scope="public_profile,email, pages_manage_posts"></fb:login-button>
+
+  <button id="fbLogout" onclick="fbLogout()"><span class="fb_button_text">Logout</button>
+
+  <div class="form-group textArea mx-3 mt-5">
+    <textarea class="form-control "  id="contentTextArea"  placeholder="Add your content here" rows="3" cols="5"></textarea>
+  </div>
+  <div class="btnsubmit text-center ">
+     <button type="button" style="color: #1DA1F2;"  class="btn btn-lg mb-4" onclick="publishContent()">Submit</button>
+  </div>
+</div>
 </body>
 </html>
