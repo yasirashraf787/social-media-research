@@ -63,10 +63,33 @@
         );
     }
 
+    function getLikes()
+    {
+      FB.api(
+            "/"+fbAccountResponse.authResponse.userID+"/accounts?",
+            function (response) {
+              if (response && !response.error) {
+                           
+                var page_id = response['data'][0].id;
+                var page_access_token = response['data'][0].access_token;
+
+                FB.api(
+                  "/"+page_id+"/likes",
+                  function (response) {
+                    if (response && !response.error) {
+                      console.log(JSON.stringify(response));
+                    }
+                  }
+                );
+              }
+            }
+        );
+    }
+
   </script>
   
-  <div style="width: 400px;">
-  <fb:login-button scope="public_profile,email, pages_manage_posts"></fb:login-button>
+  <div style="width: 1000px;">
+  <fb:login-button scope="public_profile,email, pages_manage_posts, pages_manage_instant_articles"></fb:login-button>
 
   <button id="fbLogout" onclick="fbLogout()"><span class="fb_button_text">Logout</button>
 
@@ -76,6 +99,11 @@
   <div class="btnsubmit text-center ">
      <button type="button" style="color: #1DA1F2;"  class="btn btn-lg mb-4" onclick="publishContent()">Submit</button>
   </div>
+
+  <div class="btnsubmit text-center ">
+    <button type="button" style="color: #1DA1F2;"  class="btn btn-lg mb-4" onclick="getLikes()">Get Likes</button>
+ </div>
+
 </div>
 </body>
 </html>
