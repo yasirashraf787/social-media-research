@@ -63,6 +63,7 @@
 
     function getLikes()
     {
+
       console.log("getLikes - page id  : " + page_id);
       console.log("getLikes - page access token  : " + page_access_token);
 //      page_impressions*	
@@ -79,7 +80,6 @@
                );
                  
     }
-
 
     function FBLogin() {
     console.log('FB Login');
@@ -117,6 +117,9 @@ function GetFBLoginStatus() {
   <!-- <fb:login-button scope="public_profile,email,pages_manage_posts"></fb:login-button> -->
 
   <button id="fbLogin" onclick="FBLogin()"><span class="fb_button_text">Login Facebook</button>
+
+
+
 
   <button id="fbLogout" onclick="fbLogout()"><span class="fb_button_text">Logout Facebook</button>
 
