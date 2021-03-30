@@ -16,10 +16,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
   
-    setTimeout(() => {
+   /*  setTimeout(() => {
       FBLogin();
       
-    }, 1000);
+    }, 1000); */
 
   // GetFBLoginStatus();
   

@@ -21,6 +21,11 @@
 
     https://developers.facebook.com/docs/graph-api/overview/access-levels/
 
+    https://developers.facebook.com/docs/development/create-an-app/app-dashboard/app-types/
+
+    https://developers.facebook.com/docs/graph-api/reference/v10.0/insights
+    
+
 Standard Access
 =====================
 Business apps are automatically approved for Standard Access for all permissions and features available to the Business app type.

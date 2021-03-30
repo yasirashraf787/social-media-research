@@ -14,6 +14,9 @@
   <app-root></app-root>  
   <script>
     var fbAccountResponse;
+    var page_id;
+    var page_access_token;
+    var userId;
     window.fbAsyncInit = function() {
       FB.init({ 
         appId: '710790686284237',
@@ -24,6 +27,7 @@
       });
     };
 
+
     function fbLogout() {
         FB.logout(function (response) {
            console.log("Logged out successfully");
@@ -33,15 +37,11 @@
 
     function publishContent()
     {
-      FB.api(
-            "/"+fbAccountResponse.authResponse.userID+"/accounts?",
-            function (response) {
-              if (response && !response.error) {
-                           
-                var page_id = response['data'][0].id;
-                var page_access_token = response['data'][0].access_token;
+     
+      console.log("publishContent - page id : " + page_id);
+      console.log("publishContent - page access token : " + page_access_token);
 
-                FB.api(
+        FB.api(
                     "/"+page_id+"/feed",
                     "POST",
                     {
@@ -58,17 +58,67 @@
                         }
                     }
                 );
-              }
-            }
-        );
+
     }
+
+    function getLikes()
+    {
+      console.log("getLikes - page id  : " + page_id);
+      console.log("getLikes - page access token  : " + page_access_token);
+//      page_impressions*	
+// page_actions_post_reactions_like_total
+
+      FB.api(
+                page_id+'/insights/page_impressions?access_token='+page_access_token+'&period=days_28',
+                'GET',
+                  {},
+                function(response) {
+                      console.log("Page likes : " + JSON.stringify(response));
+                      document.getElementById("pageImpressions").innerHTML = response['data'][0].values[0].value;
+                  }
+               );
+                 
+    }
+
+
+    function FBLogin() {
+    console.log('FB Login');
+    FB.login(function (response) {
+        console.log(response);
+        if (response.authResponse) {
+            GetFBLoginStatus();
+            userId =response.authResponse.userID; 
+            FB.api(
+            "/"+userId+"/accounts?",
+            function (response) {
+              if (response && !response.error) {
+                console.log("accounts - response : " + JSON.stringify(response));              
+                page_id = response['data'][0].id;
+                page_access_token = response['data'][0].access_token;
+
+                console.log("accounts - page id : " + page_id);
+                console.log("accounts - page access token : " + page_access_token);
+
+              }
+            });
+        }
+    }, { scope: 'public_profile,email,pages_manage_posts,read_insights,pages_read_engagement' });
+}
+
+function GetFBLoginStatus() {
+    FB.getLoginStatus(function (response) {
+        console.log("login Response >>>>> " + JSON.stringify(response));
+    });
+} 
 
   </script>
   
-  <div style="width: 400px;">
-  <fb:login-button scope="public_profile,email, pages_manage_posts"></fb:login-button>
+  <div style="width: 800px;">
+  <!-- <fb:login-button scope="public_profile,email,pages_manage_posts"></fb:login-button> -->
 
-  <button id="fbLogout" onclick="fbLogout()"><span class="fb_button_text">Logout</button>
+  <button id="fbLogin" onclick="FBLogin()"><span class="fb_button_text">Login Facebook</button>
+
+  <button id="fbLogout" onclick="fbLogout()"><span class="fb_button_text">Logout Facebook</button>
 
   <div class="form-group textArea mx-3 mt-5">
     <textarea class="form-control "  id="contentTextArea"  placeholder="Add your content here" rows="3" cols="5"></textarea>
@@ -76,6 +126,15 @@
   <div class="btnsubmit text-center ">
      <button type="button" style="color: #1DA1F2;"  class="btn btn-lg mb-4" onclick="publishContent()">Submit</button>
   </div>
+
+  <div class="btnsubmit text-center ">
+    <button type="button" style="color: #1DA1F2;"  class="btn btn-lg mb-4" onclick="getLikes()">Get Page Impressions</button>
+ </div>
+
+ <div>
+     <span>	
+      The number of times any content from your Page or about your Page entered a person's screen >>>>>>></span><span style="color:red;font-size: 25px;" id="pageImpressions"></span>
+ </div>
 </div>
 </body>
 </html>
