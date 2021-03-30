@@ -1,5 +1,6 @@
 <div class="card shadow-sm p-3 mb-5 bg-white rounded">
-    <h2 class="title text-center text-primary">Social Media Posting</h2>
+    <h2 class="title text-center text-primary">Let Them Know</h2>
+    <i class="fas fa-share-alt"></i>
 </div>
 <div class="container-fluid">
     <div class="row justify-content-between" style="margin: 0 auto;">
@@ -14,35 +15,45 @@
     <div class="row justify-content-between" style="margin: 0 auto;">
         <div class="col-6">
             <div class="card shadow-sm p-3 mt-3 mb-5 bg-white rounded">
-                <div class="card-header mt-3">
+                <!-- <div class="card-header mt-3">
                     Post to Facebook Page
-                </div>
+                </div> -->
                 <div class="card-body">
-                    <form>
+                    <form [formGroup]="fbForm">
                         <div class="form-group">
-                            <label>Text</label>
-                            <textarea class="form-control" rows="3"></textarea>
+                            <!-- <label>Text</label> -->
+                            <textarea id="fbmessage" formControlName="message" class="form-control" rows="3" placeholder="Add your content here..."></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary mt-2">Submit</button>
-                        <button type="submit" class="btn btn-primary mt-2 ms-1">Logout</button>
+                        <button type="button" class="btn btn-primary mt-2" [disabled] = "loggedIn == false" (click)="SubmitPost()">Post</button>
+                        <button type="button" class="btn btn-primary mt-2 ms-1" [disabled] = "loggedIn == false" >Get Impressions</button>                    
+                        <button type="button" class="btn btn-primary mt-2 ms-1" [disabled] = "loggedIn == false" (click)="SignOutFB()">Logout</button>
                     </form>
+                    <div class="mt-3">
+                        <span>Impressions :</span>
+                    </div>
+                    <div class="mt-3">
+                        <span>Likes :</span>
+                    </div>
+                    <div class="mt-3">
+                        <span>Wows :</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="col-6">
             <div class="card shadow-sm p-3 mt-3 mb-5 bg-white rounded">
-                <div class="card-header mt-3">
+                <!-- <div class="card-header mt-3">
                     Post to Twitter account
-                </div>
+                </div> -->
                 <div class="card-body">
                     <form>
                         <div class="form-group">
-                            <label>Text</label>
-                            <textarea class="form-control" rows="3"></textarea>
+                            <!-- <label>Text</label> -->
+                            <textarea class="form-control" rows="3" placeholder="Add your content here..."></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary mt-2">Submit</button>
-                        <button type="submit" class="btn btn-primary mt-2 ms-1">Logout</button>
+                        <button type="submit" class="btn btn-primary mt-2" [disabled] = "true">Tweet</button>
+                        <button type="submit" class="btn btn-primary mt-2 ms-1" [disabled] = "true">Logout</button>
                     </form>
                 </div>
             </div>

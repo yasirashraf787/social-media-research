@@ -20,6 +20,11 @@ export class AuthenticateService {
     this.Token = token;
   }
 
+  public DeleteToken(): void {
+    localStorage.removeItem('Token');
+    this.Token = '';
+  }
+
   public Header(): any {
     var header = {
       headers: new HttpHeaders()

@@ -4,6 +4,8 @@ import { AppComponent } from './app.component';
 import { RouterModule,Routes } from '@angular/router';
 import { LoginComponent } from './Components/login/login.component';
 import { SocialLoginModule, SocialAuthServiceConfig, FacebookLoginProvider } from 'angularx-social-login';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent },
@@ -19,7 +21,10 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     RouterModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
+    SocialLoginModule,
+    HttpClientModule,
+    FormsModule
   ],
   providers: [
     {
