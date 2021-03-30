@@ -1,23 +1,51 @@
- <div class=" text-center  mt-4 heading">
-     <h1 class="text center">Let B Known</h1>
- </div>
-
-
-<div class="maindiv" >
-    <div class="buttonlogin">
-      
-        <button type="button"  class="btn  btn-lg mt-4 mb-3"  style="color: #0B85EE;" (click)="hideandShowbyfacebook()">{{loginLogoutFBTxt}}</button>
-        <button type="button"  class="btn  btn-lg mx-4 mt-4 mb-3" style="color: #1DA1F2;" (click)="hideandShowbytwitter()">{{loginLogoutTwitterTxt}}</button>
-    </div>
-    
-    <div *ngIf="textAreaAndSubmitButton_1 || textAreaAndSubmitButton_2">
-        <div class="form-group textArea mx-3 mt-5">
-          <textarea class="form-control "  id="exampleFormControlTextarea1"  placeholder="Add your content here" rows="3" cols="5"></textarea>
-        </div>
-        <div class="btnsubmit text-center ">
-           <button type="button" style="color: #1DA1F2;"  class="btn btn-lg mb-4">Submit</button>
-        </div>
-    </div>
-
+<div class="card shadow-sm p-3 mb-5 bg-white rounded">
+    <h2 class="title text-center text-primary">Social Media Posting</h2>
 </div>
+<div class="container-fluid">
+    <div class="row justify-content-between" style="margin: 0 auto;">
+        <div class="col-6">
+            <button type="button" class="btn btn-primary btn-lg w-100" (click)="SignInFB()">Facebook</button>
+        </div>
+        <div class="col-6">
+            <button type="button" class="btn btn-primary btn-lg w-100">Twitter</button>
+        </div>
+    </div>
 
+    <div class="row justify-content-between" style="margin: 0 auto;">
+        <div class="col-6">
+            <div class="card shadow-sm p-3 mt-3 mb-5 bg-white rounded">
+                <div class="card-header mt-3">
+                    Post to Facebook Page
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-group">
+                            <label>Text</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                        <button type="submit" class="btn btn-primary mt-2 ms-1">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="card shadow-sm p-3 mt-3 mb-5 bg-white rounded">
+                <div class="card-header mt-3">
+                    Post to Twitter account
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-group">
+                            <label>Text</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                        <button type="submit" class="btn btn-primary mt-2 ms-1">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

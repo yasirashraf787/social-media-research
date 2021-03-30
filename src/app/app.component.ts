@@ -15,18 +15,5 @@ export class AppComponent implements OnInit {
   title = 'fb-post';
 
   ngOnInit(): void {
-  
-   /*  setTimeout(() => {
-      FBLogin();
-      
-    }, 1000); */
-
-  // GetFBLoginStatus();
-  
-  // setTimeout(() => {
-  //   var token = GetFBLoginStatus();
-  //   console.log(token);
-    
-  // }, 1000);
   }
 }

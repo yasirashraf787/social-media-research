@@ -9,112 +9,111 @@
   <script async defer crossorigin="anonymous"  src="https://connect.facebook.net/en_US/sdk.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 </head>
 <body>
   <app-root></app-root>  
   <script>
-    var fbAccountResponse;
-    var page_id;
-    var page_access_token;
-    var userId;
-    window.fbAsyncInit = function() {
-      FB.init({ 
-        appId: '710790686284237',
-        status: true, 
-        cookie: true, 
-        xfbml: true,
-        version: 'v10.0'
-      });
-    };
+    // var fbAccountResponse;
+    // var page_id;
+    // var page_access_token;
+    // var userId;
+    // window.fbAsyncInit = function() {
+    //   FB.init({ 
+    //     appId: '710790686284237',
+    //     status: true, 
+    //     cookie: true, 
+    //     xfbml: true,
+    //     version: 'v10.0'
+    //   });
+    // };
 
 
-    function fbLogout() {
-        FB.logout(function (response) {
-           console.log("Logged out successfully");
-           window.location.reload();
-        });
-    }
+//     function fbLogout() {
+//         FB.logout(function (response) {
+//            console.log("Logged out successfully");
+//            window.location.reload();
+//         });
+//     }
 
-    function publishContent()
-    {
-     
-      console.log("publishContent - page id : " + page_id);
-      console.log("publishContent - page access token : " + page_access_token);
+//     function publishContent()
+//     {
+//       console.log("publishContent - page id : " + page_id);
+//       console.log("publishContent - page access token : " + page_access_token);
 
-        FB.api(
-                    "/"+page_id+"/feed",
-                    "POST",
-                    {
-                        "message": document.getElementById("contentTextArea").value,
-                        "access_token": page_access_token
-                    },
-                    function (response) {
-                        console.log(response);
-                        if (response && !response.error) {
+//         FB.api(
+//                     "/"+page_id+"/feed",
+//                     "POST",
+//                     {
+//                         "message": document.getElementById("contentTextArea").value,
+//                         "access_token": page_access_token
+//                     },
+//                     function (response) {
+//                         console.log(response);
+//                         if (response && !response.error) {
                        
-                        console.log(response);
-                        document.getElementById("contentTextArea").value = '';
-                        alert("Your Post has been Successfully Submitted !!!");
-                        }
-                    }
-                );
+//                         console.log(response);
+//                         document.getElementById("contentTextArea").value = '';
+//                         alert("Your Post has been Successfully Submitted !!!");
+//                         }
+//                     }
+//                 );
 
-    }
+//     }
 
-    function getLikes()
-    {
+//     function getLikes()
+//     {
 
-      console.log("getLikes - page id  : " + page_id);
-      console.log("getLikes - page access token  : " + page_access_token);
-//      page_impressions*	
-// page_actions_post_reactions_like_total
+//       console.log("getLikes - page id  : " + page_id);
+//       console.log("getLikes - page access token  : " + page_access_token);
+// //      page_impressions*	
+// // page_actions_post_reactions_like_total
 
-      FB.api(
-                page_id+'/insights/page_impressions?access_token='+page_access_token+'&period=days_28',
-                'GET',
-                  {},
-                function(response) {
-                      console.log("Page likes : " + JSON.stringify(response));
-                      document.getElementById("pageImpressions").innerHTML = response['data'][0].values[0].value;
-                  }
-               );
+//       FB.api(
+//                 page_id+'/insights/page_impressions?access_token='+page_access_token+'&period=days_28',
+//                 'GET',
+//                   {},
+//                 function(response) {
+//                       console.log("Page likes : " + JSON.stringify(response));
+//                       document.getElementById("pageImpressions").innerHTML = response['data'][0].values[0].value;
+//                   }
+//                );
                  
-    }
+//     }
 
-    function FBLogin() {
-    console.log('FB Login');
-    FB.login(function (response) {
-        console.log(response);
-        if (response.authResponse) {
-            GetFBLoginStatus();
-            userId =response.authResponse.userID; 
-            FB.api(
-            "/"+userId+"/accounts?",
-            function (response) {
-              if (response && !response.error) {
-                console.log("accounts - response : " + JSON.stringify(response));              
-                page_id = response['data'][0].id;
-                page_access_token = response['data'][0].access_token;
+//     function FBLogin() {
+//     console.log('FB Login');
+//     FB.login(function (response) {
+//         console.log(response);
+//         if (response.authResponse) {
+//             GetFBLoginStatus();
+//             userId =response.authResponse.userID; 
+//             FB.api(
+//             "/"+userId+"/accounts?",
+//             function (response) {
+//               if (response && !response.error) {
+//                 console.log("accounts - response : " + JSON.stringify(response));              
+//                 page_id = response['data'][0].id;
+//                 page_access_token = response['data'][0].access_token;
 
-                console.log("accounts - page id : " + page_id);
-                console.log("accounts - page access token : " + page_access_token);
+//                 console.log("accounts - page id : " + page_id);
+//                 console.log("accounts - page access token : " + page_access_token);
 
-              }
-            });
-        }
-    }, { scope: 'public_profile,email,pages_manage_posts,read_insights,pages_read_engagement' });
-}
+//               }
+//             });
+//         }
+//     }, { scope: 'public_profile,email,pages_manage_posts,read_insights,pages_read_engagement' });
+// }
 
-function GetFBLoginStatus() {
-    FB.getLoginStatus(function (response) {
-        console.log("login Response >>>>> " + JSON.stringify(response));
-    });
-} 
+// function GetFBLoginStatus() {
+//     FB.getLoginStatus(function (response) {
+//         console.log("login Response >>>>> " + JSON.stringify(response));
+//     });
+// } 
 
-  </script>
+//   </script>
   
-  <div style="width: 800px;">
-  <!-- <fb:login-button scope="public_profile,email,pages_manage_posts"></fb:login-button> -->
+  <!-- <div style="width: 800px;">
 
   <button id="fbLogin" onclick="FBLogin()"><span class="fb_button_text">Login Facebook</button>
 
@@ -138,6 +137,6 @@ function GetFBLoginStatus() {
      <span>	
       The number of times any content from your Page or about your Page entered a person's screen >>>>>>></span><span style="color:red;font-size: 25px;" id="pageImpressions"></span>
  </div>
-</div>
+</div> -->
 </body>
 </html>
