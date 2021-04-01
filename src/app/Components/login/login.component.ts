@@ -25,6 +25,10 @@ export class LoginComponent implements OnInit {
 
   public fbForm: FormGroup;
 
+  public verifyCode: string = '';
+  public OAuthToken: string = '';
+  public OAuthTokenSecret: string = '';
+
   constructor(private socialAuthService: SocialAuthService, private FBServices: FBServicesService, 
     private auth: AuthenticateService, private TwitterServices: TwitterService) { }
 
@@ -130,7 +134,20 @@ export class LoginComponent implements OnInit {
       oauth_consumer_key : 'XJ3v59z4tm5HZEUM6AmG6w7Y8',
       oauth_consumer_secret : 'XJ3v59z4tm5HZEUM6AmG6w7Y8'
     }
-    this.TwitterServices.RequestToken(auth).subscribe(response => {
+
+    this.TwitterServices.GetAuthorize().subscribe(response => {
+      console.log(response);
+      this.OAuthToken = response.oauthRequestToken;
+      this.OAuthTokenSecret = response.oauthRequestTokenSecret;
+      window.open(response.redirectUrl);
+    });
+  }
+
+  public VerifyCode(): void {
+    console.log(this.verifyCode);
+    console.log(this.OAuthToken);
+
+    this.TwitterServices.GetAccessToken(this.OAuthToken, this.OAuthTokenSecret, this.verifyCode).subscribe(response => {
       console.log(response);
     });
   }

@@ -8,7 +8,7 @@
             <button type="button" class="btn btn-primary btn-lg w-100" (click)="SignInFB()">Facebook</button>
         </div>
         <div class="col-6">
-            <button type="button" class="btn btn-primary btn-lg w-100" (click)="SignInTwitter()">Twitter</button>
+            <button type="button" class="btn btn-primary btn-lg w-100" (click)="SignInTwitter()" data-bs-toggle="modal" data-bs-target="#varifierPopup">Twitter</button>
         </div>
     </div>
 
@@ -81,24 +81,27 @@
     </div>
 </div>
 
-<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" (click)="OpenModal()" data-bs-target="#staticBackdrop">
-    Launch static backdrop modal
+<!-- Button trigger modal -->
+<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#varifierPopup">
+    Launch demo modal
   </button>
-  
-  <div *ngIf="isModalOpen == true" class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+   -->
+  <!-- Modal -->
+  <div class="modal fade" id="varifierPopup" data-bs-backdrop="static" tabindex="-1" aria-labelledby="varifierPopupLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+          <h5 class="modal-title" id="varifierPopupLabel">Verify</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          ...
+            <!-- <label>Verification Code: </label> -->
+            <input [value]="verifyCode" (input)="verifyCode = $event.target.value;"  placeholder="Enter Verification Code" type="text" />
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Understood</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="VerifyCode()">Ok</button>
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
