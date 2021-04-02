@@ -3,8 +3,11 @@ import { SocialAuthService, FacebookLoginProvider, SocialUser } from 'angularx-s
 import { FBServicesService } from '../../Services/fbservices.service';
 import { AuthenticateService } from '../../Services/authenticate.service';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ThrowStmt } from '@angular/compiler';
+import { templateJitUrl, ThrowStmt } from '@angular/compiler';
 import { TwitterService } from 'src/app/Services/twitter.service';
+
+declare var $: any;
+
 
 @Component({
   selector: 'app-login',
@@ -12,7 +15,8 @@ import { TwitterService } from 'src/app/Services/twitter.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  public loggedIn: boolean = false;
+  public fbLoggedIn: boolean = false;
+  public twitterLoggedIn: boolean = false;
   public user: SocialUser;
   public userId: string;
   public pageAccessToken: string;
@@ -24,10 +28,14 @@ export class LoginComponent implements OnInit {
   public fanCount: number;
 
   public fbForm: FormGroup;
+  public twitterForm: FormGroup;
 
   public verifyCode: string = '';
   public OAuthToken: string = '';
   public OAuthTokenSecret: string = '';
+
+  public consumerOAuthToken: string = '';
+  public consumerOAuthTokenSecret: string = '';
 
   constructor(private socialAuthService: SocialAuthService, private FBServices: FBServicesService, 
     private auth: AuthenticateService, private TwitterServices: TwitterService) { }
@@ -37,11 +45,15 @@ export class LoginComponent implements OnInit {
     this.fbForm = new FormGroup({
       message: new FormControl('')
     });
+
+    this.twitterForm = new FormGroup({
+      message: new FormControl('')
+    });
   }
 
   public SignInFB(): void {
 
-    if(!this.loggedIn)
+    if(!this.fbLoggedIn)
     {
       const fbLoginOptions = {
         scope: 'public_profile,email,pages_manage_posts,read_insights,pages_read_engagement'
@@ -49,7 +61,7 @@ export class LoginComponent implements OnInit {
   
       this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID, fbLoginOptions).then((user) =>{
         this.user = user;
-        this.loggedIn = true;
+        this.fbLoggedIn = true;
         console.log("User Response: ", user);
         this.userId = user.id;
         console.log("User id: " + this.userId);
@@ -76,10 +88,10 @@ export class LoginComponent implements OnInit {
   public SignOutFB(): void {
     this.socialAuthService.signOut(true).then((user) => {
       console.log("User: ", user);
-      this.loggedIn = false;
+      this.fbLoggedIn = false;
       this.auth.DeleteToken();
       this.isGetImpressionClicked = false;
-      this.resetForm();
+      this.resetFBForm();
 
     }).catch(err => {
       console.log("Error: " + err);
@@ -101,7 +113,7 @@ export class LoginComponent implements OnInit {
     this.FBServices.PublishContentToPage(this.pageId, postData).subscribe(response => {
       console.log("Response: ", response);
       alert('Your content posted successfuly');
-      this.resetForm();
+      this.resetFBForm();
     });
   }
 
@@ -123,24 +135,31 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  public resetForm(): void {
+  public resetFBForm(): void {
     this.fbForm = new FormGroup({
       message: new FormControl('')
     });
   }
 
-  public SignInTwitter(): void {
-    var auth = {
-      oauth_consumer_key : 'XJ3v59z4tm5HZEUM6AmG6w7Y8',
-      oauth_consumer_secret : 'XJ3v59z4tm5HZEUM6AmG6w7Y8'
-    }
-
-    this.TwitterServices.GetAuthorize().subscribe(response => {
-      console.log(response);
-      this.OAuthToken = response.oauthRequestToken;
-      this.OAuthTokenSecret = response.oauthRequestTokenSecret;
-      window.open(response.redirectUrl);
+  public resetTwitterForm(): void {
+    this.twitterForm = new FormGroup({
+      message: new FormControl('')
     });
+  }
+
+  public SignInTwitter(): void {
+
+    if(!this.twitterLoggedIn)
+    {
+      $('#varifierPopup').modal('show');
+      this.verifyCode = '';
+      this.TwitterServices.GetAuthorize().subscribe(response => {
+        console.log(response);
+        this.OAuthToken = response.oauthRequestToken;
+        this.OAuthTokenSecret = response.oauthRequestTokenSecret;
+        window.open(response.redirectUrl);
+      });
+    }
   }
 
   public VerifyCode(): void {
@@ -149,6 +168,35 @@ export class LoginComponent implements OnInit {
 
     this.TwitterServices.GetAccessToken(this.OAuthToken, this.OAuthTokenSecret, this.verifyCode).subscribe(response => {
       console.log(response);
+      this.consumerOAuthToken = response.access_token;
+      this.consumerOAuthTokenSecret = response.access_token_secret;
+
+      this.twitterLoggedIn = true;
+
     });
   }
+
+  public SubmitTweet(): void {
+    console.log(this.twitterForm.value.message);
+    if(this.twitterForm.value.message == '')
+    {
+      alert('Your Content is empty, please write something...');
+      return;
+    }
+
+    var tweet = {
+      message: this.twitterForm.value.message
+    }
+    this.TwitterServices.PostTweet(this.consumerOAuthToken, this.consumerOAuthTokenSecret, tweet).subscribe(response => {
+      console.log(response);
+      alert('Your content posted successfuly');
+      this.resetTwitterForm();
+    });
+  }
+
+  public LogoutTwitter(): void {
+    this.twitterLoggedIn = false;
+    this.resetTwitterForm();
+  }
+
 }
