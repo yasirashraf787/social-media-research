@@ -5,6 +5,8 @@ import { AuthenticateService } from '../../Services/authenticate.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { templateJitUrl, ThrowStmt } from '@angular/compiler';
 import { TwitterService } from 'src/app/Services/twitter.service';
+import { LinkedinService } from 'src/app/Services/linkedin.service';
+import { ActivatedRoute } from '@angular/router';
 
 declare var $: any;
 
@@ -38,7 +40,22 @@ export class LoginComponent implements OnInit {
   public consumerOAuthTokenSecret: string = '';
 
   constructor(private socialAuthService: SocialAuthService, private FBServices: FBServicesService, 
-    private auth: AuthenticateService, private TwitterServices: TwitterService) { }
+    private auth: AuthenticateService, private TwitterServices: TwitterService, private LinkedInServices: LinkedinService,
+    private activateRoute: ActivatedRoute) 
+    {
+      this.activateRoute.queryParams.subscribe(params => {
+        const code = params['code'];
+        console.log('AccessToken: ' + code);
+
+        if(code != undefined){
+          // console.log('Valid');
+          this.LinkedInServices.GetUser(code).subscribe(response => {
+            console.log(response);
+          });
+        }
+
+      });
+    }
 
   ngOnInit() {
 
@@ -197,6 +214,15 @@ export class LoginComponent implements OnInit {
   public LogoutTwitter(): void {
     this.twitterLoggedIn = false;
     this.resetTwitterForm();
+  }
+
+  public SignInLinkedIn(): void {
+    console.log('Login LinkedIn');
+    this.LinkedInServices.GetAuth().subscribe(response => {
+      console.log(response.redirectURL);
+      window.open(response.redirectURL);
+    })
+    // window.open('https://www.linkedin.com/oauth/v2/authorization?client_id=7772x28uth7umh&redirect_uri=http://localhost:3000/linkedin&response_type=code&scope=r_liteprofile%20r_emailaddress%20w_member_social');
   }
 
 }

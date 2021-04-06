@@ -61,6 +61,28 @@
                 </div>
             </div>
         </div>
+
+        <div class="row justify-content-between" style="margin: 0 auto;">
+          <div class="col-6">
+              <button type="button" class="btn btn-primary btn-lg w-100" (click)="SignInLinkedIn()" style="background-color: royalblue">Linked <i class="fab fa-linkedin"></i></button>
+          </div>
+          <!-- <div class="col-6">
+              <button type="button" class="btn btn-primary btn-lg w-100" (click)="SignInTwitter()" data-bs-toggle="modal">Twitter <i class="fab fa-twitter"></i></button>
+          </div> -->
+      </div>
+        <div class="col-6">
+          <div class="card shadow-sm p-3 mt-3 mb-5 bg-white rounded">
+              <div class="card-body">
+                  <form [formGroup]="twitterForm">
+                      <div class="form-group">
+                          <textarea formControlName="message" class="form-control" rows="3" placeholder="Add your content here..."></textarea>
+                      </div>
+                      <button type="submit" class="btn btn-primary mt-2" [disabled] = "twitterLoggedIn == false" style="background-color: royalblue;">Post</button>
+                      <button type="button" class="btn btn-primary mt-2 ms-1" [disabled] = "twitterLoggedIn == false" (click)="LogoutTwitter()" style="background-color: royalblue;">Logout</button>
+                  </form>
+              </div>
+          </div>
+      </div>
     </div>
 </div>
 
