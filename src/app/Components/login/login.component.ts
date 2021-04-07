@@ -19,6 +19,8 @@ declare var $: any;
 export class LoginComponent implements OnInit {
   public fbLoggedIn: boolean = false;
   public twitterLoggedIn: boolean = false;
+  public linkedinLoggedIn: boolean = false;
+
   public user: SocialUser;
   public userId: string;
   public pageAccessToken: string;
@@ -31,6 +33,7 @@ export class LoginComponent implements OnInit {
 
   public fbForm: FormGroup;
   public twitterForm: FormGroup;
+  public linkedinForm: FormGroup;
 
   public verifyCode: string = '';
   public OAuthToken: string = '';
@@ -44,13 +47,18 @@ export class LoginComponent implements OnInit {
     private activateRoute: ActivatedRoute) 
     {
       this.activateRoute.queryParams.subscribe(params => {
-        const code = params['code'];
-        console.log('AccessToken: ' + code);
+        const authorized = params['authorized'];
+        const token = params['token'];
+        console.log('authorized: ' + authorized);
+        console.log('token: ' + token);
 
-        if(code != undefined){
+        if(authorized != undefined){
           // console.log('Valid');
-          this.LinkedInServices.GetUser(code).subscribe(response => {
-            console.log(response);
+          this.LinkedInServices.GetUser(authorized, token).subscribe(response => {
+            if(authorized == 'true'){
+              console.log(authorized, response);
+              this.linkedinLoggedIn = true;
+            }
           });
         }
 
@@ -64,6 +72,10 @@ export class LoginComponent implements OnInit {
     });
 
     this.twitterForm = new FormGroup({
+      message: new FormControl('')
+    });
+
+    this.linkedinForm = new FormGroup({
       message: new FormControl('')
     });
   }
@@ -219,10 +231,18 @@ export class LoginComponent implements OnInit {
   public SignInLinkedIn(): void {
     console.log('Login LinkedIn');
     this.LinkedInServices.GetAuth().subscribe(response => {
-      console.log(response.redirectURL);
+      // console.log(response.redirectURL);
       window.open(response.redirectURL);
     })
     // window.open('https://www.linkedin.com/oauth/v2/authorization?client_id=7772x28uth7umh&redirect_uri=http://localhost:3000/linkedin&response_type=code&scope=r_liteprofile%20r_emailaddress%20w_member_social');
+  }
+
+  public SubmitLinkedInPost(): void {
+
+  }
+
+  public LogoutLinkedin(): void {
+
   }
 
 }

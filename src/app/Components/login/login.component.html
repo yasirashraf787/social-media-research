@@ -73,12 +73,12 @@
         <div class="col-6">
           <div class="card shadow-sm p-3 mt-3 mb-5 bg-white rounded">
               <div class="card-body">
-                  <form [formGroup]="twitterForm">
+                  <form [formGroup]="linkedinForm" (ngSubmit) = "SubmitLinkedInPost()">
                       <div class="form-group">
                           <textarea formControlName="message" class="form-control" rows="3" placeholder="Add your content here..."></textarea>
                       </div>
-                      <button type="submit" class="btn btn-primary mt-2" [disabled] = "twitterLoggedIn == false" style="background-color: royalblue;">Post</button>
-                      <button type="button" class="btn btn-primary mt-2 ms-1" [disabled] = "twitterLoggedIn == false" (click)="LogoutTwitter()" style="background-color: royalblue;">Logout</button>
+                      <button type="submit" class="btn btn-primary mt-2" [disabled] = "linkedinLoggedIn == false" style="background-color: royalblue;">Post</button>
+                      <button type="button" class="btn btn-primary mt-2 ms-1" [disabled] = "linkedinLoggedIn == false" (click)="LogoutLinkedin()" style="background-color: royalblue;">Logout</button>
                   </form>
               </div>
           </div>

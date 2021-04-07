@@ -13,11 +13,11 @@ export class LinkedinService {
     return this.httpClient.get<any>('http://localhost:3000/linkedin/auth');
   }
 
-  public GetUser(accessToken): Observable<any> {
-    var header = {
-      headers: new HttpHeaders()
-        .set('Authorization', 'Bearer ' + accessToken)
-    }
-    return this.httpClient.get<any>('https://api.linkedin.com/v2/me', header);
+  public GetUser(authorized: any, token: any): Observable<any> {
+    // var header = {
+    //   headers: new HttpHeaders()
+    //     .set('Authorization', 'Bearer ' + accessToken)
+    // }
+    return this.httpClient.get<any>('http://localhost:3000/linkedin/user', {params: {isAuthorized: authorized, token: token}}); //https://api.linkedin.com/v2/me
   }
 }
