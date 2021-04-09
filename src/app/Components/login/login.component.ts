@@ -21,8 +21,8 @@ export class LoginComponent implements OnInit {
   public twitterLoggedIn: boolean = false;
   public linkedinLoggedIn: boolean = false;
 
-  public user: SocialUser;
-  public userId: string;
+  public fbUser: SocialUser;
+  public fbUserId: string;
   public pageAccessToken: string;
   public pageId: string;
   public isGetImpressionClicked: boolean = false;
@@ -42,21 +42,24 @@ export class LoginComponent implements OnInit {
   public consumerOAuthToken: string = '';
   public consumerOAuthTokenSecret: string = '';
 
+  public linkedInUserId: string = '';
+  public linkedInUserToken: string = '';
+
   constructor(private socialAuthService: SocialAuthService, private FBServices: FBServicesService, 
     private auth: AuthenticateService, private TwitterServices: TwitterService, private LinkedInServices: LinkedinService,
     private activateRoute: ActivatedRoute) 
     {
       this.activateRoute.queryParams.subscribe(params => {
         const authorized = params['authorized'];
-        const token = params['token'];
+        this.linkedInUserToken = params['token'];
         console.log('authorized: ' + authorized);
-        console.log('token: ' + token);
+        console.log('token: ' + this.linkedInUserToken);
 
         if(authorized != undefined){
-          // console.log('Valid');
-          this.LinkedInServices.GetUser(authorized, token).subscribe(response => {
+          this.LinkedInServices.GetUser(authorized, this.linkedInUserToken).subscribe(response => {
             if(authorized == 'true'){
               console.log(authorized, response);
+              this.linkedInUserId = response.userId;
               this.linkedinLoggedIn = true;
             }
           });
@@ -89,17 +92,17 @@ export class LoginComponent implements OnInit {
       };
   
       this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID, fbLoginOptions).then((user) =>{
-        this.user = user;
+        this.fbUser = user;
         this.fbLoggedIn = true;
         console.log("User Response: ", user);
-        this.userId = user.id;
-        console.log("User id: " + this.userId);
+        this.fbUserId = user.id;
+        console.log("User id: " + this.fbUserId);
         
         this.auth.SaveToken(user.authToken);
         this.FBServices.header = this.auth.Header();
         // console.log(this.auth.GetToken());
         
-        this.FBServices.GetPages(this.userId).subscribe(response => {
+        this.FBServices.GetPages(this.fbUserId).subscribe(response => {
           console.log(response);
           this.pageAccessToken = response.data[0].access_token;
           this.pageId = response.data[0].id;
@@ -176,6 +179,12 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  public resetLinkedInForm(): void {
+    this.linkedinForm = new FormGroup({
+      message: new FormControl('')
+    });
+  }
+
   public SignInTwitter(): void {
 
     if(!this.twitterLoggedIn)
@@ -238,11 +247,29 @@ export class LoginComponent implements OnInit {
   }
 
   public SubmitLinkedInPost(): void {
+    if(this.linkedinForm.value.message == ''){
+      alert('Your content is empty, please write something...');
+      return;
+    }
 
+    var data = {
+      title: 'Testing Post',
+      text: this.linkedinForm.value.message,
+      url: 'https://localhost:4200/letthemknow',
+      thumb: 'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      id: this.linkedInUserId
+    }
+
+    this.LinkedInServices.PublishContent(data, this.linkedInUserToken).subscribe(response => {
+      console.log(response);
+      if(response.success){
+        alert('Your content posted Successfully.');
+      }
+    });
   }
 
   public LogoutLinkedin(): void {
-
+    this.linkedinLoggedIn = false;
+    this.resetLinkedInForm();
   }
-
 }
